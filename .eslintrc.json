@@ -26,6 +26,9 @@
   ],
   "rules": {
     "prettier/prettier": "error",
+    "react/react-in-jsx-scope": "off",
+    "no-use-before-define": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
     "react-hooks/rules-of-hooks": "off",
     "react-hooks/exhaustive-deps": "warn",
     "react/jsx-filename-extension": [
