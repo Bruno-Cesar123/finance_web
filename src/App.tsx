@@ -1,9 +1,10 @@
+import SignIn from './pages/SignIn/SignIn';
 import GlobalStyle from './styles/global';
 
 export default function App() {
   return (
     <>
-      <h1>Hello World</h1>
+      <SignIn />
       <GlobalStyle />
     </>
   );
