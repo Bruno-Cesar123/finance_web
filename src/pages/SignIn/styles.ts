@@ -38,9 +38,11 @@ export const Content = styled.div`
 
       a {
         text-decoration: none;
+        transition: all 0.2s;
+        color: #1e90ff;
 
         &:hover {
-          text-decoration: underline;
+          opacity: 0.8;
         }
       }
     }
