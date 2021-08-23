@@ -1,5 +1,6 @@
+import { Link } from 'react-router-dom';
 import { Avatar, Typography, Button } from '@material-ui/core';
-// import { Link } from 'react-router-dom';
+
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 import logo from '../../assets/images/logo.png';
@@ -60,8 +61,8 @@ export default function SignIn() {
             Entrar
           </Button>
           <div className="links">
-            <a href="/">Esqueceu a senha?</a>
-            <a href="/">Ainda não possui conta?</a>
+            <Link to="/forgot-password">Esqueceu a senha?</Link>
+            <Link to="/signup">Ainda não possui conta?</Link>
           </div>
         </form>
       </Content>

@@ -1,13 +1,15 @@
-// import SignIn from './pages/SignIn';
-import ForgotPassword from './pages/ForgotPassword';
+import { BrowserRouter as Router } from 'react-router-dom';
+
+import Routes from './routes';
 
 import GlobalStyle from './styles/global';
 
 export default function App() {
   return (
-    <>
-      <ForgotPassword />
+    <Router>
+      <Routes />
+
       <GlobalStyle />
-    </>
+    </Router>
   );
 }

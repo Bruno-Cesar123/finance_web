@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Avatar, Typography, Button } from '@material-ui/core';
 import LockOpenOutlinedIcon from '@material-ui/icons/LockOpenOutlined';
 import ArrowBackOutlinedIcon from '@material-ui/icons/ArrowBackOutlined';
@@ -72,9 +73,9 @@ export default function SignUp() {
           </Button>
 
           <div className="links">
-            <a href="/">
+            <Link to="/">
               <ArrowBackOutlinedIcon /> Retornar ao login
-            </a>
+            </Link>
           </div>
         </form>
       </Content>

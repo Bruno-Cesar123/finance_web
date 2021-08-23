@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Avatar, Typography, Button } from '@material-ui/core';
 
 import VpnLockOutlinedIcon from '@material-ui/icons/VpnLockOutlined';
@@ -23,7 +24,7 @@ export default function ForgotPassword() {
           </Avatar>
 
           <Typography component="h1" variant="h5">
-            Esqueceu senha!
+            Recuperação de senha!
           </Typography>
 
           <Input
@@ -49,9 +50,9 @@ export default function ForgotPassword() {
           </Button>
 
           <div className="links">
-            <a href="/">
+            <Link to="/">
               <ArrowBackOutlinedIcon /> Retornar ao login
-            </a>
+            </Link>
           </div>
         </form>
       </Content>
