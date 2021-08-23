@@ -1,12 +1,12 @@
 // import SignIn from './pages/SignIn';
-import SignUp from './pages/SignUp';
+import ForgotPassword from './pages/ForgotPassword';
 
 import GlobalStyle from './styles/global';
 
 export default function App() {
   return (
     <>
-      <SignUp />
+      <ForgotPassword />
       <GlobalStyle />
     </>
   );
