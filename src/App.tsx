@@ -1,10 +1,12 @@
-import SignIn from './pages/SignIn/SignIn';
+// import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
+
 import GlobalStyle from './styles/global';
 
 export default function App() {
   return (
     <>
-      <SignIn />
+      <SignUp />
       <GlobalStyle />
     </>
   );
