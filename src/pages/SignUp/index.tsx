@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useToasts } from 'react-toast-notifications';
@@ -11,6 +11,7 @@ import logo from '../../assets/images/logo.png';
 import Input from '../../components/Input';
 
 import { Container, Header, Content } from './styles';
+import api from '../../services/api';
 
 interface SignUpFormData {
   name: string;
@@ -29,6 +30,7 @@ const validationSchema = Yup.object().shape({
 });
 
 export default function SignUp() {
+  const history = useHistory();
   const { addToast } = useToasts();
 
   const formik = useFormik({
@@ -38,14 +40,24 @@ export default function SignUp() {
       password: '',
     },
     validationSchema,
-    onSubmit: (data: SignUpFormData) => {
-      console.log(data);
+    onSubmit: async (data: SignUpFormData) => {
+      try {
+        await api.post('/users', data);
 
-      addToast('Conta criada com sucesso', {
-        appearance: 'success',
-        autoDismiss: true,
-        autoDismissTimeout: 3000,
-      });
+        history.push('/');
+
+        addToast('Conta criada com sucesso', {
+          appearance: 'success',
+          autoDismiss: true,
+          autoDismissTimeout: 3000,
+        });
+      } catch (err) {
+        addToast('Não foi possivel criar sua conta', {
+          appearance: 'error',
+          autoDismiss: true,
+          autoDismissTimeout: 3000,
+        });
+      }
     },
   });
 
