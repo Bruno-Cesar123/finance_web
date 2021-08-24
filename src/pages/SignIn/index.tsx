@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
@@ -7,6 +8,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 import logo from '../../assets/images/logo.png';
 import video from '../../assets/videos/video.mp4';
+
+import AuthContext from '../../context/AuthContext';
 
 import Input from '../../components/Input';
 
@@ -27,6 +30,10 @@ const validationSchema = Yup.object().shape({
 });
 
 export default function SignIn() {
+  const { name } = useContext(AuthContext);
+
+  console.log(name);
+
   const formik = useFormik({
     initialValues: {
       email: '',
