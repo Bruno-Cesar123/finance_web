@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
-import { Avatar, Typography, Button } from '@material-ui/core';
+import * as Yup from 'yup';
+import { useFormik } from 'formik';
 
+import { Avatar, Typography, Button } from '@material-ui/core';
 import VpnLockOutlinedIcon from '@material-ui/icons/VpnLockOutlined';
 import ArrowBackOutlinedIcon from '@material-ui/icons/ArrowBackOutlined';
 
@@ -10,7 +12,27 @@ import Input from '../../components/Input';
 
 import { Container, Header, Content } from './styles';
 
+interface ForgotPasswordFormData {
+  email: string;
+}
+
+const validationSchema = Yup.object().shape({
+  email: Yup.string()
+    .email('* Digite um email válido')
+    .required('* E-mail obrogatório'),
+});
+
 export default function ForgotPassword() {
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+    },
+    validationSchema,
+    onSubmit: (data: ForgotPasswordFormData) => {
+      console.log(data);
+    },
+  });
+
   return (
     <Container>
       <Header>
@@ -18,7 +40,7 @@ export default function ForgotPassword() {
       </Header>
 
       <Content>
-        <form>
+        <form onSubmit={formik.handleSubmit}>
           <Avatar className="avatar">
             <VpnLockOutlinedIcon />
           </Avatar>
@@ -30,13 +52,17 @@ export default function ForgotPassword() {
           <Input
             variant="outlined"
             margin="normal"
-            aria-describedby="Input de email"
+            autoFocus
             fullWidth
-            name="email"
-            label="Digite seu email"
-            type="email"
-            id="email"
             autoComplete="email"
+            aria-describedby="Input de email"
+            label="Digite seu email"
+            name="email"
+            id="email"
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            error={formik.touched.email && Boolean(formik.errors.email)}
+            helperText={formik.touched.email && formik.errors.email}
           />
 
           <Button
