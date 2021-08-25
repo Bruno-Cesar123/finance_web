@@ -1,7 +1,8 @@
-import { useContext } from 'react';
+import { useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
+import { useToasts } from 'react-toast-notifications';
 import { Avatar, Typography, Button } from '@material-ui/core';
 
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -9,7 +10,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import logo from '../../assets/images/logo.png';
 import video from '../../assets/videos/video.mp4';
 
-import AuthContext from '../../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 
 import Input from '../../components/Input';
 
@@ -30,9 +31,8 @@ const validationSchema = Yup.object().shape({
 });
 
 export default function SignIn() {
-  const { name } = useContext(AuthContext);
-
-  console.log(name);
+  const { addToast } = useToasts();
+  const { signIn } = useAuth();
 
   const formik = useFormik({
     initialValues: {
@@ -40,9 +40,29 @@ export default function SignIn() {
       password: '',
     },
     validationSchema,
-    onSubmit: (data: SignInFormData) => {
-      console.log(data);
-    },
+    onSubmit: useCallback(
+      async (data: SignInFormData) => {
+        try {
+          signIn({
+            email: data.email,
+            password: data.password,
+          });
+
+          addToast('Sessão iniciada com sucesso', {
+            appearance: 'success',
+            autoDismiss: true,
+            autoDismissTimeout: 3000,
+          });
+        } catch (err) {
+          addToast('Não foi possivel iniciar sua sessão', {
+            appearance: 'error',
+            autoDismiss: true,
+            autoDismissTimeout: 3000,
+          });
+        }
+      },
+      [signIn, addToast],
+    ),
   });
 
   return (
