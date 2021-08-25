@@ -2,7 +2,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { ToastProvider } from 'react-toast-notifications';
 import Routes from './routes';
 
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider } from './hooks/AuthContext';
 
 import GlobalStyle from './styles/global';
 

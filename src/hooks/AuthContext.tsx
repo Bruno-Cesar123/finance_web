@@ -20,6 +20,7 @@ interface SignInCredentials {
 interface AuthContextData {
   user: Record<string, unknown>;
   signIn(credentials: SignInCredentials): Promise<void>;
+  signOut(): void;
 }
 
 interface ChildrenProps {
@@ -54,8 +55,15 @@ function AuthProvider({ children }: ChildrenProps) {
     setData({ token, user });
   }, []);
 
+  const signOut = useCallback(() => {
+    localStorage.removeItem('@FinanceWeb:token');
+    localStorage.removeItem('@FinanceWeb:user');
+
+    setData({} as AuthState);
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ user: data.user, signIn }}>
+    <AuthContext.Provider value={{ user: data.user, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   );

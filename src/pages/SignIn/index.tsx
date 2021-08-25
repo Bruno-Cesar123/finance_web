@@ -10,7 +10,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import logo from '../../assets/images/logo.png';
 import video from '../../assets/videos/video.mp4';
 
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../hooks/AuthContext';
 
 import Input from '../../components/Input';
 
@@ -43,7 +43,7 @@ export default function SignIn() {
     onSubmit: useCallback(
       async (data: SignInFormData) => {
         try {
-          signIn({
+          await signIn({
             email: data.email,
             password: data.password,
           });
