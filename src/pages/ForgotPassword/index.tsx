@@ -2,12 +2,13 @@ import { Link } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 
-import { Avatar, Typography, Button } from '@material-ui/core';
+import { Avatar, Typography } from '@material-ui/core';
 import VpnLockOutlinedIcon from '@material-ui/icons/VpnLockOutlined';
 import ArrowBackOutlinedIcon from '@material-ui/icons/ArrowBackOutlined';
 
 import logo from '../../assets/images/logo.png';
 
+import Button from '../../components/Button';
 import Input from '../../components/Input';
 
 import { Container, Header, Content } from './styles';

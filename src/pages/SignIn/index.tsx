@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useToasts } from 'react-toast-notifications';
-import { Avatar, Typography, Button } from '@material-ui/core';
+import { Avatar, Typography } from '@material-ui/core';
 
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
@@ -12,6 +12,7 @@ import video from '../../assets/videos/video.mp4';
 
 import { useAuth } from '../../hooks/AuthContext';
 
+import Button from '../../components/Button';
 import Input from '../../components/Input';
 
 import { Container, Content, Header, VideoBg, Background } from './styles';
