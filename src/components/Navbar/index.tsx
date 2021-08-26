@@ -18,13 +18,14 @@ export default function NavBar() {
             <ListItemText primary="dashboard" />
           </ListItem>
         </Link>
-
-        <ListItem button>
-          <ListItemIcon>
-            <AccountCircleOutlinedIcon />
-          </ListItemIcon>
-          <ListItemText primary="profile" />
-        </ListItem>
+        <Link to="/profile" className="link">
+          <ListItem button>
+            <ListItemIcon>
+              <AccountCircleOutlinedIcon />
+            </ListItemIcon>
+            <ListItemText primary="profile" />
+          </ListItem>
+        </Link>
       </List>
     </Container>
   );
