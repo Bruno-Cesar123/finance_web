@@ -25,7 +25,7 @@ interface SignInFormData {
 const validationSchema = Yup.object().shape({
   email: Yup.string()
     .email('* Digite um email válido')
-    .required('* E-mail obrogatório'),
+    .required('* E-mail obrigatório'),
   password: Yup.string()
     .required('* Senha obrigatória')
     .min(6, '* No mínimo 6 dígitos'),

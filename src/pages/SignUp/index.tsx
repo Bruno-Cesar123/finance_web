@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
@@ -24,7 +25,7 @@ const validationSchema = Yup.object().shape({
   name: Yup.string().required('* Nome obrigatório'),
   email: Yup.string()
     .email('* Digite um email válido')
-    .required('* E-mail obrogatório'),
+    .required('* E-mail obrigatório'),
   password: Yup.string()
     .required('* Senha obrigatória')
     .min(6, '* No mínimo 6 dígitos'),
@@ -41,25 +42,28 @@ export default function SignUp() {
       password: '',
     },
     validationSchema,
-    onSubmit: async (data: SignUpFormData) => {
-      try {
-        await api.post('/users', data);
+    onSubmit: useCallback(
+      async (data: SignUpFormData) => {
+        try {
+          await api.post('/users', data);
 
-        history.push('/');
+          history.push('/');
 
-        addToast('Conta criada com sucesso', {
-          appearance: 'success',
-          autoDismiss: true,
-          autoDismissTimeout: 3000,
-        });
-      } catch (err) {
-        addToast('Não foi possivel criar sua conta', {
-          appearance: 'error',
-          autoDismiss: true,
-          autoDismissTimeout: 3000,
-        });
-      }
-    },
+          addToast('Conta criada com sucesso', {
+            appearance: 'success',
+            autoDismiss: true,
+            autoDismissTimeout: 3000,
+          });
+        } catch (err) {
+          addToast('Não foi possivel criar sua conta', {
+            appearance: 'error',
+            autoDismiss: true,
+            autoDismissTimeout: 3000,
+          });
+        }
+      },
+      [addToast, history],
+    ),
   });
 
   return (
