@@ -40,6 +40,12 @@ export const Title = styled.div`
       margin-right: 8px;
     }
   }
+
+  @media (max-width: 400px) {
+    h2 {
+      font-size: 28px;
+    }
+  }
 `;
 
 export const InfoValues = styled.div`
