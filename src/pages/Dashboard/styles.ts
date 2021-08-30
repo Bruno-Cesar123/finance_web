@@ -5,21 +5,55 @@ export const Container = styled.div`
   background: #f2f2f2;
 `;
 
-export const Content = styled.div`
+export const Content = styled.main`
   max-width: 1000px;
   margin: 24px auto;
   padding: 16px;
+`;
 
+export const Title = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 8px;
+  border-bottom: 1px solid #555;
+
+  h2 {
+    font-size: 36px;
+    color: #555;
+  }
+
+  a {
+    display: flex;
+    align-items: center;
+
+    text-decoration: none;
+    transition: all 0.2s;
+    color: #555;
+
+    &:hover {
+      opacity: 0.8;
+    }
+
+    svg {
+      margin-right: 8px;
+    }
+  }
+`;
+
+export const InfoValues = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
+  margin-top: 24px;
 
   @media (max-width: 580px) {
     grid-template-columns: 1fr;
   }
 `;
 
-export const SectionGrid = styled.div`
+export const SectionGrid = styled.section`
   display: flex;
   flex-direction: column;
 
@@ -54,11 +88,9 @@ export const SectionGrid = styled.div`
   }
 `;
 
-export const ContentChart = styled.div`
-  max-width: 1000px;
-  margin: 24px auto;
-  padding: 16px;
-
+export const ContentChart = styled.section`
   display: grid;
   grid-template-columns: 1fr;
+
+  margin-top: 24px;
 `;
