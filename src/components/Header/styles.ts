@@ -20,10 +20,7 @@ export const ContentHeader = styled.div`
   }
 `;
 
-export const Menu = styled.div`
-  /* top: 20px;
-  right: 30px; */
-`;
+export const Menu = styled.div``;
 
 export const Profile = styled.div`
   position: relative;
