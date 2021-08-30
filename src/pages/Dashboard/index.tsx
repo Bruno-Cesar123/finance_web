@@ -1,31 +1,15 @@
-import { useState, useEffect } from 'react';
 import Chart from 'react-apexcharts';
+
 import AttachMoneyOutlinedIcon from '@material-ui/icons/AttachMoneyOutlined';
+import ArrowUpwardOutlinedIcon from '@material-ui/icons/ArrowUpwardOutlined';
+import ArrowDownwardOutlinedIcon from '@material-ui/icons/ArrowDownwardOutlined';
 
 import Header from '../../components/Header';
 import Grid from '../../components/Grid';
 
 import { Container, Content, SectionGrid, ContentChart } from './styles';
-import api from '../../services/api';
-
-interface TotalMoney {
-  sum: string;
-}
 
 export default function Dashboard() {
-  const [total, setTotal] = useState<TotalMoney>();
-
-  useEffect(() => {
-    api
-      .get('/finance/total/entrance')
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch(() => {
-        console.log('erro');
-      });
-  }, []);
-
   const chartOptions = {
     options: {
       chart: {
@@ -52,31 +36,32 @@ export default function Dashboard() {
       <Content>
         <Grid>
           <SectionGrid>
-            <div>
-              <h3>Total Entrada:</h3>
-              <AttachMoneyOutlinedIcon />
+            <div className="entrance">
+              <h4>Entradas</h4>
+              <ArrowUpwardOutlinedIcon />
             </div>
-            <p>{total?.sum}</p>
+
+            <p>R$ 5000.00</p>
+          </SectionGrid>
+        </Grid>
+
+        <Grid>
+          <SectionGrid>
+            <div className="spend">
+              <h4>Gastos</h4>
+              <ArrowDownwardOutlinedIcon />
+            </div>
+            <p>- R$ 3000.00</p>
           </SectionGrid>
         </Grid>
 
         <Grid>
           <SectionGrid>
             <div>
-              <h3>Total Gastos:</h3>
+              <h4>Total</h4>
               <AttachMoneyOutlinedIcon />
             </div>
-            <p>R$ -2000,00</p>
-          </SectionGrid>
-        </Grid>
-
-        <Grid>
-          <SectionGrid>
-            <div>
-              <h3>Total:</h3>
-              <AttachMoneyOutlinedIcon />
-            </div>
-            <p>R$ 3000,00</p>
+            <p>R$ 2000.00</p>
           </SectionGrid>
         </Grid>
       </Content>
