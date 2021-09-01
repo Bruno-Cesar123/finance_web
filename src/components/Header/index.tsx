@@ -5,9 +5,12 @@ import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined';
 
 import logo from '../../assets/images/logo.png';
 
+import { useAuth } from '../../hooks/AuthContext';
+
 import { Container, ContentHeader, Menu, Profile, ContentMenu } from './styles';
 
 export default function Header() {
+  const { signOut } = useAuth();
   const [openMenu, setOpenMenu] = useState(false);
 
   return (
@@ -32,7 +35,9 @@ export default function Header() {
                 </li>
                 <li>
                   <ExitToAppOutlinedIcon />
-                  <Link to="/">Logout</Link>
+                  <Link to="/" onClick={signOut}>
+                    Logout
+                  </Link>
                 </li>
               </ul>
             </ContentMenu>

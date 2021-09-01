@@ -1,8 +1,9 @@
 import { useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { format, parseISO } from 'date-fns';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
+import { useToasts } from 'react-toast-notifications';
 import {
   Avatar,
   Typography,
@@ -22,6 +23,7 @@ import Button from '../../components/Button';
 import Input from '../../components/Input';
 
 import { Container, Header, Content } from './styles';
+import api from '../../services/api';
 
 interface FinanceFormData {
   type: string;
@@ -44,24 +46,41 @@ const validationSchema = Yup.object().shape({
 });
 
 export default function Finance() {
+  const history = useHistory();
+  const { addToast } = useToasts();
   const { user } = useAuth();
 
   const formik = useFormik({
     initialValues: {
-      type: 'entrance',
+      type: 'entrada',
       description: '',
       user_id: user.id,
       value: 0,
       date: formatedDate,
     },
     validationSchema,
-    onSubmit: useCallback(async (data: FinanceFormData) => {
-      try {
-        console.log(data);
-      } catch (err) {
-        console.log('erro');
-      }
-    }, []),
+    onSubmit: useCallback(
+      async (data: FinanceFormData) => {
+        try {
+          await api.post('/finance', data);
+
+          history.push('/dashboard');
+
+          addToast('Transação cadastrada com sucesso', {
+            appearance: 'success',
+            autoDismiss: true,
+            autoDismissTimeout: 3000,
+          });
+        } catch (err) {
+          addToast('Houve um erro ao cadastrar, Tente novamente!', {
+            appearance: 'error',
+            autoDismiss: true,
+            autoDismissTimeout: 3000,
+          });
+        }
+      },
+      [addToast, history],
+    ),
   });
 
   return (
@@ -96,8 +115,8 @@ export default function Finance() {
               onChange={formik.handleChange}
               error={formik.touched.type && Boolean(formik.errors.type)}
             >
-              <MenuItem value="entrance">Entrada</MenuItem>
-              <MenuItem value="spend">Gasto</MenuItem>
+              <MenuItem value="entrada">Entrada</MenuItem>
+              <MenuItem value="gasto">Gasto</MenuItem>
             </Select>
             <FormHelperText>
               {formik.touched.type && formik.errors.type}
@@ -148,7 +167,7 @@ export default function Finance() {
             type="date"
             name="date"
             id="date"
-            value={defaultdate}
+            // value={formik.values.date}
             onChange={formik.handleChange}
             error={formik.touched.date && Boolean(formik.errors.date)}
             helperText={formik.touched.date && formik.errors.date}
