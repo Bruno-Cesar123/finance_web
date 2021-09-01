@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Chart from 'react-apexcharts';
 
@@ -17,8 +18,13 @@ import {
   InfoValues,
   Title,
 } from './styles';
+import api from '../../services/api';
 
 export default function Dashboard() {
+  const [totalEntrance, setTotalEntrance] = useState(0);
+  const [totalSpend, setTotalSpend] = useState(0);
+  const [total, setTotal] = useState(0);
+
   const chartOptions = {
     options: {
       chart: {
@@ -30,15 +36,27 @@ export default function Dashboard() {
     },
     series: [
       {
-        name: 'series-1',
+        name: 'Entradas',
         data: [30, 40, 45, 50, 49, 60, 70, 91],
       },
       {
-        name: 'series-2',
+        name: 'Gastos',
         data: [90, 40, 45, 50, 49, 60, 70, 91],
       },
     ],
   };
+
+  useEffect(() => {
+    api.get('/finance/list/total/entrance').then((response) => {
+      setTotalEntrance(response.data);
+    });
+
+    api.get('/finance/list/total/spend').then((response) => {
+      setTotalSpend(response.data);
+    });
+
+    setTotal(totalEntrance - totalSpend);
+  }, [totalEntrance, totalSpend]);
 
   return (
     <Container>
@@ -60,7 +78,7 @@ export default function Dashboard() {
                 <ArrowUpwardOutlinedIcon />
               </div>
 
-              <p>R$ 5000.00</p>
+              <p>R$ {totalEntrance || '0.00'}</p>
             </SectionGrid>
           </Grid>
 
@@ -70,7 +88,7 @@ export default function Dashboard() {
                 <h4>Gastos</h4>
                 <ArrowDownwardOutlinedIcon />
               </div>
-              <p>- R$ 3000.00</p>
+              <p> R$ -{totalSpend || '0.00'}</p>
             </SectionGrid>
           </Grid>
 
@@ -80,7 +98,7 @@ export default function Dashboard() {
                 <h4>Total</h4>
                 <AttachMoneyOutlinedIcon />
               </div>
-              <p>R$ 2000.00</p>
+              <p>R$ {total.toFixed(2)}</p>
             </SectionGrid>
           </Grid>
         </InfoValues>
