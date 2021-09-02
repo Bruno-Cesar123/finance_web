@@ -10,7 +10,7 @@ import { useAuth } from '../../hooks/AuthContext';
 import { Container, ContentHeader, Menu, Profile, ContentMenu } from './styles';
 
 export default function Header() {
-  const { signOut } = useAuth();
+  const { signOut, user } = useAuth();
   const [openMenu, setOpenMenu] = useState(false);
 
   return (
@@ -19,14 +19,13 @@ export default function Header() {
         <img src={logo} alt="logo finance web" />
         <Menu>
           <Profile onClick={() => setOpenMenu(!openMenu)}>
-            <img src={logo} alt="logo finance web" />
+            <img src={user.avatar_url} alt={user.name} />
           </Profile>
           {openMenu && (
             <ContentMenu>
               <h3>
-                Bruno cesar
+                {user.name}
                 <br />
-                <span>Ferreira Santos</span>
               </h3>
               <ul>
                 <li>

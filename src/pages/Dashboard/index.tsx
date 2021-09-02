@@ -10,6 +10,8 @@ import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOut
 import Header from '../../components/Header';
 import Grid from '../../components/Grid';
 
+import api from '../../services/api';
+
 import {
   Container,
   Content,
@@ -18,7 +20,6 @@ import {
   InfoValues,
   Title,
 } from './styles';
-import api from '../../services/api';
 
 export default function Dashboard() {
   const [totalEntrance, setTotalEntrance] = useState(0);

@@ -1,6 +1,9 @@
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
+import { useToasts } from 'react-toast-notifications';
 
 import { Avatar, Typography } from '@material-ui/core';
 import VpnLockOutlinedIcon from '@material-ui/icons/VpnLockOutlined';
@@ -10,6 +13,8 @@ import logo from '../../assets/images/logo.png';
 
 import Button from '../../components/Button';
 import Input from '../../components/Input';
+
+import api from '../../services/api';
 
 import { Container, Header, Content } from './styles';
 
@@ -24,13 +29,39 @@ const validationSchema = Yup.object().shape({
 });
 
 export default function ForgotPassword() {
+  const { addToast } = useToasts();
+  const history = useHistory();
+  const [loading, setLoading] = useState(false);
+
   const formik = useFormik({
     initialValues: {
       email: '',
     },
     validationSchema,
-    onSubmit: (data: ForgotPasswordFormData) => {
-      console.log(data);
+    onSubmit: async (data: ForgotPasswordFormData) => {
+      try {
+        setLoading(true);
+
+        await api.post('/password/forgot', {
+          email: data.email,
+        });
+
+        history.push('/');
+
+        addToast('Email enviado com sucesso', {
+          appearance: 'success',
+          autoDismiss: true,
+          autoDismissTimeout: 3000,
+        });
+      } catch (err) {
+        addToast('Não foi possível enviar o email', {
+          appearance: 'error',
+          autoDismiss: true,
+          autoDismissTimeout: 3000,
+        });
+      } finally {
+        setLoading(false);
+      }
     },
   });
 
@@ -73,7 +104,7 @@ export default function ForgotPassword() {
             color="primary"
             className="form-button"
           >
-            Enviar
+            {loading ? 'ENVIANDO...' : 'ENVIAR'}
           </Button>
 
           <div className="links">

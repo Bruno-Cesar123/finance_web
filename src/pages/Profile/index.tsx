@@ -99,8 +99,6 @@ export default function Profile() {
               : {}),
           };
 
-          console.log(formData);
-
           const response = await api.put('/profile', formData);
 
           updateUser(response.data);
