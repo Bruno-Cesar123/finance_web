@@ -100,3 +100,7 @@ export const ContentChart = styled.section`
 
   margin-top: 24px;
 `;
+
+export const ContentTable = styled.section`
+  margin-top: 24px;
+`;

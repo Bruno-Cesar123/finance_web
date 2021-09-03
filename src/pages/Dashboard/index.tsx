@@ -1,7 +1,16 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { format, parseISO } from 'date-fns';
 import Chart from 'react-apexcharts';
+import {
+  Table,
+  TableHead,
+  TableCell,
+  TableRow,
+  TableBody,
+} from '@material-ui/core';
 
+import DeleteForeverOutlinedIcon from '@material-ui/icons/DeleteForeverOutlined';
 import AttachMoneyOutlinedIcon from '@material-ui/icons/AttachMoneyOutlined';
 import ArrowUpwardOutlinedIcon from '@material-ui/icons/ArrowUpwardOutlined';
 import ArrowDownwardOutlinedIcon from '@material-ui/icons/ArrowDownwardOutlined';
@@ -19,12 +28,65 @@ import {
   ContentChart,
   InfoValues,
   Title,
+  ContentTable,
 } from './styles';
+
+interface ListEntrance {
+  total: number;
+  date_interval: Date;
+}
+
+interface Finances {
+  id: string;
+  type: string;
+  description: string;
+  value: number;
+  date: string;
+  dateFormatted: string;
+  createdAtFormatted: string;
+  created_at: string;
+}
 
 export default function Dashboard() {
   const [totalEntrance, setTotalEntrance] = useState(0);
   const [totalSpend, setTotalSpend] = useState(0);
-  const [total, setTotal] = useState(0);
+  const [finances, setFinances] = useState<Finances[]>([]);
+
+  useEffect(() => {
+    api.get<Finances[]>('/finance').then((response) => {
+      const financesFormated = response.data.map((finance) => {
+        return {
+          ...finance,
+          createdAtFormatted: format(
+            parseISO(finance.created_at),
+            'dd-MM-yyyy',
+          ),
+          dateFormatted: format(parseISO(finance.date), 'dd-MM-yyyy'),
+        };
+      });
+      setFinances(financesFormated);
+    });
+  }, []);
+
+  useEffect(() => {
+    api.get('/finance/list/total/entrance').then((response) => {
+      setTotalEntrance(response.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    api.get('/finance/list/total/spend').then((response) => {
+      setTotalSpend(response.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    api.get<ListEntrance[]>('/finance/list/entrance').then((response) => {
+      console.log(response.data);
+    });
+  }, []);
+
+  const total = totalEntrance - totalSpend;
 
   const chartOptions = {
     options: {
@@ -32,13 +94,13 @@ export default function Dashboard() {
         id: 'basic-bar',
       },
       xaxis: {
-        categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999],
+        categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998],
       },
     },
     series: [
       {
         name: 'Entradas',
-        data: [30, 40, 45, 50, 49, 60, 70, 91],
+        data: [90, 40, 45, 50, 49, 60, 70, 91],
       },
       {
         name: 'Gastos',
@@ -46,18 +108,6 @@ export default function Dashboard() {
       },
     ],
   };
-
-  useEffect(() => {
-    api.get('/finance/list/total/entrance').then((response) => {
-      setTotalEntrance(response.data);
-    });
-
-    api.get('/finance/list/total/spend').then((response) => {
-      setTotalSpend(response.data);
-    });
-
-    setTotal(totalEntrance - totalSpend);
-  }, [totalEntrance, totalSpend]);
 
   return (
     <Container>
@@ -109,11 +159,50 @@ export default function Dashboard() {
             <Chart
               options={chartOptions.options}
               series={chartOptions.series}
-              type="area"
+              type="bar"
               height="300"
             />
           </Grid>
         </ContentChart>
+
+        <ContentTable>
+          <Grid>
+            <Table size="small" aria-label="a dense table">
+              <TableHead>
+                <TableRow>
+                  <TableCell align="right">Tipo</TableCell>
+                  <TableCell align="right">Descrição</TableCell>
+                  <TableCell align="right">Valor</TableCell>
+                  <TableCell align="right">Data da transação</TableCell>
+                  <TableCell align="right">Criado em:</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {finances.map((finance) => {
+                  return (
+                    <TableRow key={finance.id}>
+                      <TableCell align="right">{finance.type}</TableCell>
+                      <TableCell align="right">{finance.description}</TableCell>
+                      <TableCell align="right">{finance.value}</TableCell>
+                      <TableCell align="right">
+                        {finance.dateFormatted}
+                      </TableCell>
+                      <TableCell align="right">
+                        {finance.createdAtFormatted}
+                      </TableCell>
+
+                      <TableCell align="right">
+                        <DeleteForeverOutlinedIcon
+                          style={{ color: 'red', cursor: 'pointer' }}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </Grid>
+        </ContentTable>
       </Content>
     </Container>
   );
