@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { format, parseISO } from 'date-fns';
 import Chart from 'react-apexcharts';
@@ -51,6 +51,17 @@ export default function Dashboard() {
   const [totalEntrance, setTotalEntrance] = useState(0);
   const [totalSpend, setTotalSpend] = useState(0);
   const [finances, setFinances] = useState<Finances[]>([]);
+
+  const handleDelete = async (id: string, index: number) => {
+    try {
+      await api.delete(`/finance/${id}`);
+      const newFinances = [...finances];
+      newFinances.splice(index, 1);
+      setFinances(newFinances);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
     api.get<Finances[]>('/finance').then((response) => {
@@ -178,7 +189,7 @@ export default function Dashboard() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {finances.map((finance) => {
+                {finances.map((finance, index) => {
                   return (
                     <TableRow key={finance.id}>
                       <TableCell align="right">{finance.type}</TableCell>
@@ -194,6 +205,7 @@ export default function Dashboard() {
                       <TableCell align="right">
                         <DeleteForeverOutlinedIcon
                           style={{ color: 'red', cursor: 'pointer' }}
+                          onClick={() => handleDelete(finance.id, index)}
                         />
                       </TableCell>
                     </TableRow>
