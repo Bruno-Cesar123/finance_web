@@ -1,5 +1,6 @@
-import { MouseEvent, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useToasts } from 'react-toast-notifications';
 import { format, parseISO } from 'date-fns';
 import Chart from 'react-apexcharts';
 import {
@@ -48,20 +49,42 @@ interface Finances {
 }
 
 export default function Dashboard() {
+  const { addToast } = useToasts();
   const [totalEntrance, setTotalEntrance] = useState(0);
   const [totalSpend, setTotalSpend] = useState(0);
   const [finances, setFinances] = useState<Finances[]>([]);
 
-  const handleDelete = async (id: string, index: number) => {
-    try {
-      await api.delete(`/finance/${id}`);
-      const newFinances = [...finances];
-      newFinances.splice(index, 1);
-      setFinances(newFinances);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const handleTotalEntrance = useCallback(() => {
+    api.get('/finance/list/total/entrance').then((response) => {
+      setTotalEntrance(response.data);
+    });
+  }, []);
+
+  const handleTotalSpend = useCallback(() => {
+    api.get('/finance/list/total/spend').then((response) => {
+      setTotalSpend(response.data);
+    });
+  }, []);
+
+  const handleDelete = useCallback(
+    async (id: string, index: number) => {
+      try {
+        await api.delete(`/finance/${id}`);
+        const newFinances = [...finances];
+        newFinances.splice(index, 1);
+        setFinances(newFinances);
+        handleTotalEntrance();
+        handleTotalSpend();
+      } catch (err) {
+        addToast('Houve um erro ao deletar', {
+          appearance: 'error',
+          autoDismiss: true,
+          autoDismissTimeout: 3000,
+        });
+      }
+    },
+    [finances, handleTotalEntrance, handleTotalSpend],
+  );
 
   useEffect(() => {
     api.get<Finances[]>('/finance').then((response) => {
@@ -80,16 +103,12 @@ export default function Dashboard() {
   }, []);
 
   useEffect(() => {
-    api.get('/finance/list/total/entrance').then((response) => {
-      setTotalEntrance(response.data);
-    });
-  }, []);
+    handleTotalEntrance();
+  }, [handleTotalEntrance]);
 
   useEffect(() => {
-    api.get('/finance/list/total/spend').then((response) => {
-      setTotalSpend(response.data);
-    });
-  }, []);
+    handleTotalSpend();
+  }, [handleTotalSpend]);
 
   useEffect(() => {
     api.get<ListEntrance[]>('/finance/list/entrance').then((response) => {
