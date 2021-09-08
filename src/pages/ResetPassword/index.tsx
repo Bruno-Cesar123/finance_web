@@ -108,7 +108,6 @@ export default function ResetPassword() {
           <Input
             variant="outlined"
             margin="normal"
-            autoFocus
             fullWidth
             autoComplete="password_confirmation"
             aria-describedby="Input de senha"
