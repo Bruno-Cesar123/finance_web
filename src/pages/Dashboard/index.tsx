@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
 import { format, parseISO } from 'date-fns';
-import Chart from 'react-apexcharts';
 import {
   Table,
   TableHead,
@@ -26,16 +25,10 @@ import {
   Container,
   Content,
   SectionGrid,
-  ContentChart,
   InfoValues,
   Title,
   ContentTable,
 } from './styles';
-
-interface ListEntrance {
-  total: number;
-  date_interval: Date;
-}
 
 interface Finances {
   id: string;
@@ -55,13 +48,13 @@ export default function Dashboard() {
   const [finances, setFinances] = useState<Finances[]>([]);
 
   const handleTotalEntrance = useCallback(() => {
-    api.get('/finance/list/total/entrance').then((response) => {
+    api.get('/finance/total/entrance').then((response) => {
       setTotalEntrance(response.data);
     });
   }, []);
 
   const handleTotalSpend = useCallback(() => {
-    api.get('/finance/list/total/spend').then((response) => {
+    api.get('/finance/total/spend').then((response) => {
       setTotalSpend(response.data);
     });
   }, []);
@@ -83,7 +76,7 @@ export default function Dashboard() {
         });
       }
     },
-    [finances, handleTotalEntrance, handleTotalSpend],
+    [finances, handleTotalEntrance, handleTotalSpend, addToast],
   );
 
   useEffect(() => {
@@ -104,40 +97,10 @@ export default function Dashboard() {
 
   useEffect(() => {
     handleTotalEntrance();
-  }, [handleTotalEntrance]);
-
-  useEffect(() => {
     handleTotalSpend();
-  }, [handleTotalSpend]);
-
-  useEffect(() => {
-    api.get<ListEntrance[]>('/finance/list/entrance').then((response) => {
-      console.log(response.data);
-    });
-  }, []);
+  }, [handleTotalEntrance, handleTotalSpend]);
 
   const total = totalEntrance - totalSpend;
-
-  const chartOptions = {
-    options: {
-      chart: {
-        id: 'basic-bar',
-      },
-      xaxis: {
-        categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998],
-      },
-    },
-    series: [
-      {
-        name: 'Entradas',
-        data: [90, 40, 45, 50, 49, 60, 70, 91],
-      },
-      {
-        name: 'Gastos',
-        data: [90, 40, 45, 50, 49, 60, 70, 91],
-      },
-    ],
-  };
 
   return (
     <Container>
@@ -183,17 +146,6 @@ export default function Dashboard() {
             </SectionGrid>
           </Grid>
         </InfoValues>
-
-        <ContentChart>
-          <Grid>
-            <Chart
-              options={chartOptions.options}
-              series={chartOptions.series}
-              type="bar"
-              height="300"
-            />
-          </Grid>
-        </ContentChart>
 
         <ContentTable>
           <Grid>
